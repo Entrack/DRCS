@@ -54,9 +54,9 @@ class Positionator():
         return self.pos_system.get_position()
 ###
 
-p = Positionator()
+# p = Positionator()
 
-if p.is_sim:
-    rospy.spin()
-else:
-    reactor.run()
+# if p.is_sim:
+#     rospy.spin()
+# else:
+#     reactor.run()

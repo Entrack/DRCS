@@ -26,6 +26,11 @@ import argparse, shlex
 # scheduler
 from threading import Timer
 
+import numpy as np
+from math import factorial
+
+import matplotlib.pyplot as plt
+
 #   for Ctrl-C
 import signal
 def signal_handler(signal, frame):
@@ -184,7 +189,7 @@ class FormationManager():
         debug_print_function(self)
         self.formation = None
         self.command_id = 0
-        self.forming_period = 1.0
+        self.forming_period = 0.5
         self.robot_diameter = 1
         self.opt_distance = 4
         self.r_eps = 0.2
@@ -192,6 +197,22 @@ class FormationManager():
         self.form_coeff = 0.5
         self.r_form_max = 1.6
         self.analyser = analyser
+
+        self.x_1 = np.array([])
+        self.y_1 = np.array([])
+        self.x_2 = np.array([])
+        self.y_2 = np.array([])
+        self.x_3 = np.array([])
+        self.y_3 = np.array([])
+        self.x_4 = np.array([])
+        self.y_4 = np.array([])
+        self.x_5 = np.array([])
+        self.y_5 = np.array([])
+        self.x_6 = np.array([])
+        self.y_6 = np.array([])
+
+        self.count = 0
+
 
     def __del__(self):
         debug_print_function(self)
@@ -212,8 +233,70 @@ class FormationManager():
 
         results = self.get_result_positions(x, y)
 
+        self.count += 1
+
+        #save
+        if self.count > 5:
+            try:
+                self.x_1 = np.append(self.x_1, self.analyser.units["1"].x())
+                self.y_1 = np.append(self.y_1, self.analyser.units["1"].y())
+            except:
+                pass
+            try:
+                self.x_2 = np.append(self.x_2, self.analyser.units["2"].x())
+                self.y_2 = np.append(self.y_2, self.analyser.units["2"].y())
+            except:
+                pass
+            try:
+                self.x_3 = np.append(self.x_3, self.analyser.units["3"].x())
+                self.y_3 = np.append(self.y_3, self.analyser.units["3"].y())
+            except:
+                pass
+            try:
+                self.x_4 = np.append(self.x_4, self.analyser.units["4"].x())
+                self.y_4 = np.append(self.y_4, self.analyser.units["4"].y())
+            except:
+                pass
+            try:
+                self.x_5 = np.append(self.x_5, self.analyser.units["5"].x())
+                self.y_5 = np.append(self.y_5, self.analyser.units["5"].y())
+            except:
+                pass
+            try:
+                self.x_6 = np.append(self.x_6, self.analyser.units["6"].x())
+                self.y_6 = np.append(self.y_6, self.analyser.units["6"].y())
+            except:
+                pass
+
         if self.group_in_position(x, y):# and self.units_in_position(results):
             self.stop()
+
+            print self.x_1.size
+            print self.y_1.size
+            print self.x_2.size
+            print self.y_2.size
+            print self.x_3.size
+            print self.y_3.size
+            print self.x_4.size
+            print self.y_4.size
+            print self.x_5.size
+            print self.y_5.size
+            print self.x_6.size
+            print self.y_6.size
+
+            #for plots in xy plane
+            plt.plot(self.x_1, self.y_1, color='red')
+            plt.plot(self.x_2, self.y_2, color='blue')
+            plt.plot(self.x_3, self.y_3, color='green')
+            plt.plot(self.x_4, self.y_4, color='purple')
+            plt.plot(self.x_5, self.y_5, color='yellow')
+            plt.plot(self.x_6, self.y_6, color='aqua')
+
+            plt.xlim(-10, 20)
+            plt.ylim(-10, 20)
+            plt.gca().set_aspect('equal', adjustable='box')
+            plt.grid()
+            plt.show()
             return
 
         self.print_units_target_distances(results)
@@ -355,6 +438,6 @@ class FormationManager():
             self.analyser.OUT_S_GOAL_publish(_id, self.analyser.units[_id].x(), self.analyser.units[_id].y())
 ###
 
-a = Analyser()
+# a = Analyser()
 
-rospy.spin()
+# rospy.spin()

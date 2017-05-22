@@ -127,11 +127,11 @@ class MoverFactory(Factory, ROS_connector):
         self.sender.send_velocity(args.angular, args.linear)
 ###
 
-mf = MoverFactory()
-if mf.is_sim:
-    endpoint = TCP4ServerEndpoint(reactor, mf.port + 256)
-else:
-    endpoint = TCP4ServerEndpoint(reactor, 8256 + 256)
-endpoint.listen(mf)
+# mf = MoverFactory()
+# if mf.is_sim:
+#     endpoint = TCP4ServerEndpoint(reactor, mf.port + 256)
+# else:
+#     endpoint = TCP4ServerEndpoint(reactor, 8256 + 256)
+# endpoint.listen(mf)
 
-reactor.run()
+# reactor.run()

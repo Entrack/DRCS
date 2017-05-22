@@ -145,11 +145,11 @@ class PerceptorFactory(Factory, ROS_connector):
         self.publish("GROUP_INFO", ui)
 ###
 
-pf = PerceptorFactory()
-if pf.is_sim:
-    endpoint = TCP4ServerEndpoint(reactor, pf.port)
-else:
-    endpoint = TCP4ServerEndpoint(reactor, 8256)
-endpoint.listen(pf)
+# pf = PerceptorFactory()
+# if pf.is_sim:
+#     endpoint = TCP4ServerEndpoint(reactor, pf.port)
+# else:
+#     endpoint = TCP4ServerEndpoint(reactor, 8256)
+# endpoint.listen(pf)
 
-reactor.run()
+# reactor.run()

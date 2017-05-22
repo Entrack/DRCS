@@ -64,7 +64,7 @@ class Translocator(ROS_connector):
         self.moving_period = 0.2
         self.init_sleep_time = 5.0
         self.eps_r = 0.2
-        self.min_repuls_r = 1.5
+        self.min_repuls_r = 2.5
         self.max_repuls_r = 3.0
         self.repulsion_coeff = 1.0#2.0
         self.r_deceleration = 1.0
@@ -213,8 +213,8 @@ class Translocator(ROS_connector):
     def get_linear_vel(self, resulting, current, distance):
         print resulting
         print current
-        # angle_correction = (math.sqrt(2.0) - resulting.__sub__(current).norm()) / math.sqrt(2.0)
-        angle_correction = (2.0 - resulting.__sub__(current).norm()) / 2.0
+        angle_correction = (math.sqrt(2.0) - resulting.__sub__(current).norm()) / math.sqrt(2.0)
+        #angle_correction = (2.0 - resulting.__sub__(current).norm()) / 2.0
 
         distance_correction = 1.0
         if distance >= self.r_deceleration - self.eps_deceler * self.r_deceleration:
@@ -233,11 +233,11 @@ class Translocator(ROS_connector):
     def unit_repulsion(self, resulting, current, distance):
         angle_correction = 1.0
         try:
-            angle_correction = (math.sqrt(2.0) - resulting.normalize().__sub__(current).norm()) / math.sqrt(2.0)
+            angle_correction = (2.0 - resulting.normalize().__sub__(current).norm() * 2.5) / 2.0
+            if angle_correction < 0: angle_correction = 0.0
+            pass
         except:
             pass
-        # angle_correction = 1.0
-        # debug_print(angle_correction)
         distance_correction = 0.0
         if distance >= self.max_repuls_r:
             pass
@@ -246,8 +246,6 @@ class Translocator(ROS_connector):
                 distance_correction = math.pow(self.min_repuls_r, 1) / math.pow(distance, 1)
             except:
                 pass
-            # distance_correction = self.max_repuls_r / math.pow(distance, 1)
-        # return  (5.0 * angle_correction + distance_correction) / 6.0
         return angle_correction * distance_correction
 
     def almost_cross_product(self, vector_1, vector_2):
@@ -269,9 +267,9 @@ class Translocator(ROS_connector):
         self.publish("SELF_COORD", DecartCoord(data.x, data.y))
 ###
 
-t = Translocator()
+# t = Translocator()
 
-rospy.spin()
+# rospy.spin()
 
 
 

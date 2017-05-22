@@ -196,8 +196,8 @@ class DeclamatorFactory(ClientFactory, ROS_connector):
             pass
 ###
 
-factory = DeclamatorFactory()
-rospy.sleep(factory.latch_time)
-factory.loop_network_scaning()
+# factory = DeclamatorFactory()
+# rospy.sleep(factory.latch_time)
+# factory.loop_network_scaning()
 
-reactor.run()
+# reactor.run()

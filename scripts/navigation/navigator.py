@@ -59,6 +59,7 @@ class Navigator(ROS_connector):
         if debug_node_create: rospy.init_node("Navigator")
         ROS_connector.__init__(self)
         self.model = Model()
+        self.id = "0"
         self.position = None
         #moving period
         self.latch_time = 0.2 #0.05
@@ -73,6 +74,7 @@ class Navigator(ROS_connector):
         self.linspace = np.array([])
         self.orient = RobotOrient()
         self.init_services()
+        self.load_configuration()
         debug_print_function(self)
 
     def __del__(self):
@@ -89,22 +91,51 @@ class Navigator(ROS_connector):
         rospy.wait_for_service("POS_SYST_COORD")
         debug_print_function(self)
 
+    def load_configuration(self):
+        #catch
+        try:
+            self.id = rospy.get_param("id")
+            debug_print_function(self, "id")
+        except:
+            pass
+
     def CURR_VEL(self, data):
         debug_print_function(self)
         #ask abot coord
 
         if data.linear < 0.001 and math.fabs(data.angular) < 0.001:
-            self.measure_count = 0
-            self.x = np.array([])
-            self.s_x = np.array([])
-            self.y = np.array([])
+
+            #for plots in xy plane
+            # color = 'black'
+            # if self.id == 1: color = 'red'
+            # if self.id == 2: color = 'blue'
+            # if self.id == 3: color = 'green'
+            # if self.id == 4: color = 'purple'
+            # if self.id == 5: color = 'yellow'
+            # if self.id == 6: color = 'red'
+            # if self.id == 7: color = 'aqua'
+            # plt.plot(self.x, self.y, color=color)
+            # plt.xlim(-10, 25)
+            # plt.ylim(-10, 25)
+            # plt.gca().set_aspect('equal', adjustable='box')
+            # plt.grid()
+            # plt.show()
+
+            # self.measure_count = 0
+            # self.x = np.array([])
+            # self.s_x = np.array([])
+            # self.y = np.array([])
+
+            pass
+
+            
 
         if self.positionation_up:
 
             # if self.measure_count > 5:
             #     plt.ion()   
-            #     plt.plot(self.linspace,self.x)
-            #     plt.plot(self.linspace,self.s_x, color='red')
+            #     plt.plot(self.linspace, self.x)
+            #     plt.plot(self.linspace, self.s_x, color='red')
             #     plt.pause(0.0001)
             #     plt.show()
             #     time.sleep(0.05)
@@ -112,15 +143,19 @@ class Navigator(ROS_connector):
 
             orient = self.position()
 
+            #save  xy for plots in xy plane
+            # self.x = np.append(self.x, orient.x)
+            # self.y = np.append(self.y, orient.y)
+
             if self.filter:
-                self.x = np.append(self.x, orient.x)
-                self.y = np.append(self.y, orient.y)
-                #self.angle = np.append(self.angle, orient.angle)
+                # self.x = np.append(self.x, orient.x)
+                # self.y = np.append(self.y, orient.y)
+                ## self.angle = np.append(self.angle, orient.angle)
 
                 self.measure_count += 1
                 self.linspace = np.linspace(0, self.measure_count, self.measure_count)
 
-                window  = 5
+                window = 5
                 polynom = 3
 
                 if self.measure_count < 2:
@@ -225,6 +260,6 @@ class Navigator(ROS_connector):
         return np.convolve(m[::-1], y, mode='valid')
 ###
 
-Navigator()
+# Navigator()
 
-rospy.spin()
+# rospy.spin()
