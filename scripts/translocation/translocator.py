@@ -64,8 +64,8 @@ class Translocator(ROS_connector):
         self.moving_period = 0.2
         self.init_sleep_time = 5.0
         self.eps_r = 0.2
-        self.min_repuls_r = 2.5
-        self.max_repuls_r = 3.0
+        self.min_repuls_r = 2.0 #2.5
+        self.max_repuls_r = 4.0 #3.0
         self.repulsion_coeff = 1.0#2.0
         self.r_deceleration = 1.0
         self.eps_deceler = 0.05
@@ -102,12 +102,12 @@ class Translocator(ROS_connector):
         self.publish("CURR_VEL", PolarVel())
 
     def TRANSLOC_COORD(self, data):
-        debug_print_function(self, "-x " + str(data.x) + " -y " + str(data.y) + " -r " + str(data.r))
+        # debug_print_function(self, "-x " + str(data.x) + " -y " + str(data.y) + " -r " + str(data.r))
         self.command_id += 1
         self.loop_moving(self.command_id, data.x, data.y, data.r)
 
     def loop_moving(self, command_id, x, y, r):
-        debug_print_function(self, str(command_id) + " "  + str(x) + " " + str(y) + " " + str(r))
+        # debug_print_function(self, str(command_id) + " "  + str(x) + " " + str(y) + " " + str(r))
 
         if not command_id == self.command_id:
             return
@@ -133,7 +133,7 @@ class Translocator(ROS_connector):
             return False
 
     def move(self, x, y):
-        debug_print_function(self, "---------------------------------------")
+        # debug_print_function(self, "---------------------------------------")
         
         # vector pointing at the destination
         destination = Vector()
@@ -148,8 +148,8 @@ class Translocator(ROS_connector):
 
         # count local vector of repulsion (norm=[0, 1])
         repulsion = self.get_repulsion(current)
-        debug_print(repulsion)
-        debug_print(repulsion.norm())
+        # debug_print(repulsion)
+        # debug_print(repulsion.norm())
 
         # sum them
         resulting = Vector()

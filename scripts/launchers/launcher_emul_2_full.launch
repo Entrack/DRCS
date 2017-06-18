@@ -1,0 +1,30 @@
+<launch>
+
+
+<param name="is_sim" value="True" />
+
+
+<group ns="g2">
+
+<param name="port" value="8002" />
+<param name="id" type="str" value="2" />
+
+<node name="perceptor" pkg="drcs" type="perceptor_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="analyser" pkg="drcs" type="analyser_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="declamator" pkg="drcs" type="declamator_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="translocator" pkg="drcs" type="translocator_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="mover" pkg="drcs" type="mover_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="navigator" pkg="drcs" type="navigator_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="positionator" pkg="drcs" type="positionator_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+
+</group>
+
+
+</launch>

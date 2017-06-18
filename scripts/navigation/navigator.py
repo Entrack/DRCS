@@ -27,6 +27,7 @@ from math import factorial
 
 import matplotlib.pyplot as plt
 import time
+import random
 
 
 #   for Ctrl-C
@@ -66,9 +67,12 @@ class Navigator(ROS_connector):
         self.exec_time = 0.0001
         self.positionation_up = True
         self.filter = False
+        self.corruption = False
         self.x = np.array([])
         self.s_x = np.array([])
         self.y = np.array([])
+        self.corrupted_x = np.array([])
+        self.corrupted_y = np.array([])
         self.angle = np.array([])
         self.measure_count = 0
         self.linspace = np.array([])
@@ -104,67 +108,40 @@ class Navigator(ROS_connector):
         #ask abot coord
 
         if data.linear < 0.001 and math.fabs(data.angular) < 0.001:
-
-            #for plots in xy plane
-            # color = 'black'
-            # if self.id == 1: color = 'red'
-            # if self.id == 2: color = 'blue'
-            # if self.id == 3: color = 'green'
-            # if self.id == 4: color = 'purple'
-            # if self.id == 5: color = 'yellow'
-            # if self.id == 6: color = 'red'
-            # if self.id == 7: color = 'aqua'
-            # plt.plot(self.x, self.y, color=color)
-            # plt.xlim(-10, 25)
-            # plt.ylim(-10, 25)
-            # plt.gca().set_aspect('equal', adjustable='box')
-            # plt.grid()
-            # plt.show()
-
-            # self.measure_count = 0
-            # self.x = np.array([])
-            # self.s_x = np.array([])
-            # self.y = np.array([])
-
+            # self.show_path_figure(-5, 5, -3, 3)
+            # self.show_path_figure(-10, 10, -10, 10)
             pass
 
-            
 
         if self.positionation_up:
-
-            # if self.measure_count > 5:
-            #     plt.ion()   
-            #     plt.plot(self.linspace, self.x)
-            #     plt.plot(self.linspace, self.s_x, color='red')
-            #     plt.pause(0.0001)
-            #     plt.show()
-            #     time.sleep(0.05)
-            #     plt.close()
-
             orient = self.position()
 
-            #save  xy for plots in xy plane
-            # self.x = np.append(self.x, orient.x)
-            # self.y = np.append(self.y, orient.y)
+            if self.corruption:
+                orient.x += random.random() / 4.0
+                orient.y += random.random() / 4.0
+
+            # save  xy for plots in xy plane
+            self.x = np.append(self.x, orient.x)
+            self.y = np.append(self.y, orient.y)
 
             if self.filter:
-                # self.x = np.append(self.x, orient.x)
-                # self.y = np.append(self.y, orient.y)
-                ## self.angle = np.append(self.angle, orient.angle)
-
                 self.measure_count += 1
                 self.linspace = np.linspace(0, self.measure_count, self.measure_count)
 
-                window = 5
-                polynom = 3
+                window = 7
+                polynom = 1
 
                 if self.measure_count < 2:
                     pass
                 else:
-                    if self.measure_count < 50:
-                        window = 5
+                    if self.measure_count < 10:#50:
+                        window = 7
                     else:
-                        window = self.measure_count / 10
+                        # window = self.measure_count / 10
+                        if self.measure_count < 20:
+                            window = 17
+                        # else:
+                        #     window = 37
                         if window % 2 == 0: window += 1
 
                 self.s_x = self.savitzky_golay(self.x, window, polynom)
@@ -172,6 +149,10 @@ class Navigator(ROS_connector):
                 self.orient.y = self.savitzky_golay(self.y, window, polynom)[self.measure_count - 1]
                 #self.orient.angle = self.savitzky_golay(self.angle, window, polynom)[self.measure_count - 1]
                 self.orient.angle = orient.angle
+
+                # save  xy for plots in xy plane
+                self.corrupted_x = np.append(self.corrupted_x, orient.x + 2)
+                self.corrupted_y = np.append(self.corrupted_y, orient.y)
             else:
                 self.orient.x = orient.x
                 self.orient.y = orient.y
@@ -185,6 +166,10 @@ class Navigator(ROS_connector):
             self.orient.x = new_pos[0]
             self.orient.y = -new_pos[1]
             self.orient.angle = -new_pos[2]
+
+            # save  xy for plots in xy plane
+            self.x = np.append(self.x, orient.x)
+            self.y = np.append(self.y, orient.y)
         
         self.publish("CURR_ORIENT", self.orient)
 
@@ -258,6 +243,33 @@ class Navigator(ROS_connector):
         lastvals = y[-1] + np.abs(y[-half_window-1:-1][::-1] - y[-1])
         y = np.concatenate((firstvals, y, lastvals))
         return np.convolve(m[::-1], y, mode='valid')
+
+    def show_path_figure(self, l_x, r_x, d_y, u_y):
+        plt.plot(self.x, self.y, color="red")
+        if self.filter:
+            plt.plot(self.corrupted_x, self.corrupted_y, color="blue")
+        plt.xlim(l_x, r_x)
+        plt.ylim(d_y, u_y)
+        plt.gca().set_aspect('equal', adjustable='box')
+        plt.grid()
+        plt.show()
+
+        self.measure_count = 0
+        self.x = np.array([])
+        self.s_x = np.array([])
+        self.y = np.array([])
+        if self.filter:
+            self.corrupted_x = np.array([])
+            self.corrupted_y = np.array([])
+
+        # if self.measure_count > 5:
+            #     plt.ion()   
+            #     plt.plot(self.linspace, self.x)
+            #     plt.plot(self.linspace, self.s_x, color='red')
+            #     plt.pause(0.0001)
+            #     plt.show()
+            #     time.sleep(0.05)
+            #     plt.close()
 ###
 
 # Navigator()

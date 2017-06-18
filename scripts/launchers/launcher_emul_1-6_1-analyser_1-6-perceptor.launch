@@ -1,0 +1,145 @@
+<launch>
+
+
+<param name="is_sim" value="True" />
+
+
+<group ns="g1">
+
+<param name="port" value="8001" />
+<param name="id" type="str" value="1" />
+
+<node name="perceptor" pkg="drcs" type="perceptor_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="analyser" pkg="drcs" type="analyser_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="declamator" pkg="drcs" type="declamator_launcher.py">
+  </node>
+<node name="translocator" pkg="drcs" type="translocator_launcher.py">
+  </node>
+<node name="mover" pkg="drcs" type="mover_launcher.py">
+  </node>
+<node name="navigator" pkg="drcs" type="navigator_launcher.py">
+  </node>
+<node name="positionator" pkg="drcs" type="positionator_launcher.py">
+  </node>
+
+</group>
+
+
+<group ns="g2">
+
+<param name="port" value="8002" />
+<param name="id" type="str" value="2" />
+
+<node name="perceptor" pkg="drcs" type="perceptor_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="analyser" pkg="drcs" type="analyser_launcher.py">
+  </node>
+<node name="declamator" pkg="drcs" type="declamator_launcher.py">
+  </node>
+<node name="translocator" pkg="drcs" type="translocator_launcher.py">
+  </node>
+<node name="mover" pkg="drcs" type="mover_launcher.py">
+  </node>
+<node name="navigator" pkg="drcs" type="navigator_launcher.py">
+  </node>
+<node name="positionator" pkg="drcs" type="positionator_launcher.py">
+  </node>
+
+</group>
+
+
+<group ns="g3">
+
+<param name="port" value="8003" />
+<param name="id" type="str" value="3" />
+
+<node name="perceptor" pkg="drcs" type="perceptor_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="analyser" pkg="drcs" type="analyser_launcher.py">
+  </node>
+<node name="declamator" pkg="drcs" type="declamator_launcher.py">
+  </node>
+<node name="translocator" pkg="drcs" type="translocator_launcher.py">
+  </node>
+<node name="mover" pkg="drcs" type="mover_launcher.py">
+  </node>
+<node name="navigator" pkg="drcs" type="navigator_launcher.py">
+  </node>
+<node name="positionator" pkg="drcs" type="positionator_launcher.py">
+  </node>
+
+</group>
+
+
+<group ns="g4">
+
+<param name="port" value="8004" />
+<param name="id" type="str" value="4" />
+
+<node name="perceptor" pkg="drcs" type="perceptor_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="analyser" pkg="drcs" type="analyser_launcher.py">
+  </node>
+<node name="declamator" pkg="drcs" type="declamator_launcher.py">
+  </node>
+<node name="translocator" pkg="drcs" type="translocator_launcher.py">
+  </node>
+<node name="mover" pkg="drcs" type="mover_launcher.py">
+  </node>
+<node name="navigator" pkg="drcs" type="navigator_launcher.py">
+  </node>
+<node name="positionator" pkg="drcs" type="positionator_launcher.py">
+  </node>
+
+</group>
+
+
+<group ns="g5">
+
+<param name="port" value="8005" />
+<param name="id" type="str" value="5" />
+
+<node name="perceptor" pkg="drcs" type="perceptor_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="analyser" pkg="drcs" type="analyser_launcher.py">
+  </node>
+<node name="declamator" pkg="drcs" type="declamator_launcher.py">
+  </node>
+<node name="translocator" pkg="drcs" type="translocator_launcher.py">
+  </node>
+<node name="mover" pkg="drcs" type="mover_launcher.py">
+  </node>
+<node name="navigator" pkg="drcs" type="navigator_launcher.py">
+  </node>
+<node name="positionator" pkg="drcs" type="positionator_launcher.py">
+  </node>
+
+</group>
+
+
+<group ns="g6">
+
+<param name="port" value="8006" />
+<param name="id" type="str" value="6" />
+
+<node name="perceptor" pkg="drcs" type="perceptor_launcher.py" output="screen" launch-prefix="gnome-terminal --command">
+  </node>
+<node name="analyser" pkg="drcs" type="analyser_launcher.py">
+  </node>
+<node name="declamator" pkg="drcs" type="declamator_launcher.py">
+  </node>
+<node name="translocator" pkg="drcs" type="translocator_launcher.py">
+  </node>
+<node name="mover" pkg="drcs" type="mover_launcher.py">
+  </node>
+<node name="navigator" pkg="drcs" type="navigator_launcher.py">
+  </node>
+<node name="positionator" pkg="drcs" type="positionator_launcher.py">
+  </node>
+
+</group>
+
+
+</launch>

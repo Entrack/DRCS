@@ -189,7 +189,7 @@ class FormationManager():
         debug_print_function(self)
         self.formation = None
         self.command_id = 0
-        self.forming_period = 0.5
+        self.forming_period = 0.2 # 0.5
         self.robot_diameter = 1
         self.opt_distance = 4
         self.r_eps = 0.2
@@ -237,66 +237,14 @@ class FormationManager():
 
         #save
         if self.count > 5:
-            try:
-                self.x_1 = np.append(self.x_1, self.analyser.units["1"].x())
-                self.y_1 = np.append(self.y_1, self.analyser.units["1"].y())
-            except:
-                pass
-            try:
-                self.x_2 = np.append(self.x_2, self.analyser.units["2"].x())
-                self.y_2 = np.append(self.y_2, self.analyser.units["2"].y())
-            except:
-                pass
-            try:
-                self.x_3 = np.append(self.x_3, self.analyser.units["3"].x())
-                self.y_3 = np.append(self.y_3, self.analyser.units["3"].y())
-            except:
-                pass
-            try:
-                self.x_4 = np.append(self.x_4, self.analyser.units["4"].x())
-                self.y_4 = np.append(self.y_4, self.analyser.units["4"].y())
-            except:
-                pass
-            try:
-                self.x_5 = np.append(self.x_5, self.analyser.units["5"].x())
-                self.y_5 = np.append(self.y_5, self.analyser.units["5"].y())
-            except:
-                pass
-            try:
-                self.x_6 = np.append(self.x_6, self.analyser.units["6"].x())
-                self.y_6 = np.append(self.y_6, self.analyser.units["6"].y())
-            except:
-                pass
+            self.save_data_for_six_robots()
 
         if self.group_in_position(x, y):# and self.units_in_position(results):
             self.stop()
-
-            print self.x_1.size
-            print self.y_1.size
-            print self.x_2.size
-            print self.y_2.size
-            print self.x_3.size
-            print self.y_3.size
-            print self.x_4.size
-            print self.y_4.size
-            print self.x_5.size
-            print self.y_5.size
-            print self.x_6.size
-            print self.y_6.size
-
-            #for plots in xy plane
-            plt.plot(self.x_1, self.y_1, color='red')
-            plt.plot(self.x_2, self.y_2, color='blue')
-            plt.plot(self.x_3, self.y_3, color='green')
-            plt.plot(self.x_4, self.y_4, color='purple')
-            plt.plot(self.x_5, self.y_5, color='yellow')
-            plt.plot(self.x_6, self.y_6, color='aqua')
-
-            plt.xlim(-10, 20)
-            plt.ylim(-10, 20)
-            plt.gca().set_aspect('equal', adjustable='box')
-            plt.grid()
-            plt.show()
+            
+            self.build_figures_for_six(-10, 25, -10, 25)
+            # self.build_figures_for_six(-10, 10, -10, 10)
+            
             return
 
         self.print_units_target_distances(results)
@@ -320,7 +268,8 @@ class FormationManager():
 
     def print_units_target_distances(self, results):
         for _id in results:
-            debug_print(str(_id) + " " + str(results[_id].__sub__(self.analyser.units[_id]).norm()))
+            # debug_print(str(_id) + " " + str(results[_id].__sub__(self.analyser.units[_id]).norm()))
+            pass
 
     def mass_center(self):
         mc = Vector()
@@ -349,11 +298,11 @@ class FormationManager():
         return result
 
     def get_formation_positions(self):
-        debug_print_function(self)
+        # debug_print_function(self)
         return self.formation.get_formation_positions(self.analyser.units, self.robot_diameter, self.opt_distance)
 
     def get_result_position(self, _id, target_pos, form_pos):
-        debug_print_function(self)
+        # debug_print_function(self)
         # transform to local
         target = target_pos.__sub__(self.analyser.units[_id])
         formation = form_pos.__sub__(self.analyser.units[_id])
@@ -436,6 +385,68 @@ class FormationManager():
         debug_print_function(self)
         for _id in self.analyser.units:
             self.analyser.OUT_S_GOAL_publish(_id, self.analyser.units[_id].x(), self.analyser.units[_id].y())
+
+    def save_data_for_six_robots(self):
+        try:
+            self.x_1 = np.append(self.x_1, self.analyser.units["1"].x())
+            self.y_1 = np.append(self.y_1, self.analyser.units["1"].y())
+        except:
+            pass
+        try:
+            self.x_2 = np.append(self.x_2, self.analyser.units["2"].x())
+            self.y_2 = np.append(self.y_2, self.analyser.units["2"].y())
+        except:
+            pass
+        try:
+            self.x_3 = np.append(self.x_3, self.analyser.units["3"].x())
+            self.y_3 = np.append(self.y_3, self.analyser.units["3"].y())
+        except:
+            pass
+        try:
+            self.x_4 = np.append(self.x_4, self.analyser.units["4"].x())
+            self.y_4 = np.append(self.y_4, self.analyser.units["4"].y())
+        except:
+            pass
+        try:
+            self.x_5 = np.append(self.x_5, self.analyser.units["5"].x())
+            self.y_5 = np.append(self.y_5, self.analyser.units["5"].y())
+        except:
+            pass
+        try:
+            self.x_6 = np.append(self.x_6, self.analyser.units["6"].x())
+            self.y_6 = np.append(self.y_6, self.analyser.units["6"].y())
+        except:
+            pass
+
+    def build_figures_for_six(self, l_x, r_x, d_y, u_y):
+        #for plots in xy plane
+        plt.plot(self.x_1, self.y_1, color='red')
+        plt.plot(self.x_2, self.y_2, color='blue')
+        plt.plot(self.x_3, self.y_3, color='green')
+        plt.plot(self.x_4, self.y_4, color='purple')
+        plt.plot(self.x_5, self.y_5, color='lime')
+        plt.plot(self.x_6, self.y_6, color='aqua')
+
+        plt.xlim(l_x, r_x)
+        plt.ylim(d_y, u_y)
+        plt.gca().set_aspect('equal', adjustable='box')
+        plt.grid()
+        plt.show()
+
+        self.x_1 = np.array([])
+        self.y_1 = np.array([])
+        self.x_2 = np.array([])
+        self.y_2 = np.array([])
+        self.x_3 = np.array([])
+        self.y_3 = np.array([])
+        self.x_4 = np.array([])
+        self.y_4 = np.array([])
+        self.x_5 = np.array([])
+        self.y_5 = np.array([])
+        self.x_6 = np.array([])
+        self.y_6 = np.array([])
+
+        self.count = 0
 ###
 
 # a = Analyser()

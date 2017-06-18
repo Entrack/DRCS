@@ -69,7 +69,7 @@ class Declamator(LineReceiver):
     def connectionLost(self, reason):
         debug_print("Declamator connectionLost on socket: ")
         debug_print(self.addr.host + " " + str(self.addr.port))
-        factory.delete_socket(self.id, self)
+        self.factory.delete_socket(self.id, self)
 
     def sendLine(self, line):
         try:
@@ -94,7 +94,7 @@ class Declamator(LineReceiver):
             #catch
             _id = get_word(line, 2)
             self.id = _id
-            factory.add_socket(_id, self)
+            self.factory.add_socket(_id, self)
 
 ###
 
