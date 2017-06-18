@@ -68,7 +68,7 @@ class GazeboVS(VelocitySender, ROS_connector):
         self.name = "pioneer2dx_" + self.id
         self.topic_name = "/" + self.name + "/cmd_vel"
         self.spawn_robot()
-        self.muiltiplier = 1.0 # 1.0 for non-navigtion mode
+        self.muiltiplier = 2.0 # 1.0 for non-navigtion mode
         ROS_connector.__init__(self)
         debug_print_function(self)
 
